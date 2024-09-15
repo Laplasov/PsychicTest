@@ -7,7 +7,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class NewPlayer : MonoBehaviour
 {
     [SerializeField] float _speed = 3f;
-    [SerializeField] float _InputSpace = 5f;
+    [SerializeField] float _speedSpace = 5f;
     [SerializeField] Camera _camera;
 
     Rigidbody _rb;
@@ -21,7 +21,7 @@ public class NewPlayer : MonoBehaviour
     Quaternion _offset;
     Vector3 _playerPos;
     Vector3 _direction;
-    Ray cursorRay;
+    Ray _cursorRay;
 
     private void Awake()
     {
@@ -42,13 +42,20 @@ public class NewPlayer : MonoBehaviour
         } 
 
         RotatePlayer();
+        MoveCamera();
     }
 
     void FixedUpdate()
     {
         MovePlayer();
     }
-
+    void MoveCamera()
+    {
+        _camera.transform.position = new Vector3(
+            transform.position.x, 
+            _camera.transform.position.y, 
+            transform.position.z);
+    }
     void MovePlayer()
     {
         if (_inputHorizontal != 0 || _inputVertical != 0)
@@ -58,21 +65,23 @@ public class NewPlayer : MonoBehaviour
         }
         if (_isInputSpace && _isCol)
         {
-            _rb.velocity += Vector3.up * _InputSpace;
+            _rb.velocity += Vector3.up * _speedSpace;
             _isInputSpace = false;
         }
     }
 
     void RotatePlayer()
     {
-        cursorRay = _camera.ScreenPointToRay(Input.mousePosition);
+        _cursorRay = _camera.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
         Vector3 hitPoint;
-        if (Physics.Raycast(cursorRay.origin, cursorRay.direction, out hit, float.PositiveInfinity))
+
+        if (Physics.Raycast(_cursorRay.origin, _cursorRay.direction, out hit, float.PositiveInfinity))
         {
             hitPoint = hit.point;
             Vector3 direction = hitPoint - transform.position;
+            //Debug.Log(hitPoint);
 
             //Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             //transform.rotation = lookRotation;
@@ -80,9 +89,8 @@ public class NewPlayer : MonoBehaviour
             float targetAngle = Mathf.Atan2(hitPoint.x - transform.position.x, hitPoint.z - transform.position.z) * Mathf.Rad2Deg;
             transform.eulerAngles = new Vector3(0, targetAngle, 0);
 
-            Debug.Log(hitPoint);
-            Debug.DrawRay(_camera.transform.position, hitPoint - _camera.transform.position, Color.green);
-            Debug.DrawRay(transform.position, hitPoint - transform.position, Color.red);
+            //Debug.DrawRay(_camera.transform.position, hitPoint - _camera.transform.position, Color.green);
+            //Debug.DrawRay(transform.position, hitPoint - transform.position, Color.red);
         }
     }
 
