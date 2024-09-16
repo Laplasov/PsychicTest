@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour, IInteracrable
 {
     [SerializeField] GameObject _player;
     [SerializeField] [Range(0f, 100f)] float _distanceField = 15f;
@@ -45,5 +45,13 @@ public class EnemyScript : MonoBehaviour
 
         float targetAngle = Mathf.Atan2(_enemyTarget.x - transform.position.x, _enemyTarget.z - transform.position.z) * Mathf.Rad2Deg;
         transform.eulerAngles = new Vector3(0, targetAngle, 0);
+    }
+
+    public void InteractWithCollision()
+    {
+        Debug.Log("Hit!");
+    }
+    public void InteractWithTrigger()
+    {
     }
 }

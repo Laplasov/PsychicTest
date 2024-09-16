@@ -94,12 +94,33 @@ public class NewPlayer : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collisionInfo)
+    {
+        if (collisionInfo.collider.TryGetComponent(out IInteracrable interactableColider)) {
+            interactableColider.InteractWithCollision();    
+        }
+    }
+
     void OnCollisionStay(Collision collisionInfo)
     {
-        _isCol =  true;
+        if (collisionInfo.transform.tag == "Ground")
+        {
+            _isCol =  true;
+        }
     }
     void OnCollisionExit(Collision collisionInfo)
     {
-        _isCol = false;
+        if (collisionInfo.transform.tag == "Ground")
+        {
+            _isCol = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider collisionInfo)
+    {
+        if (collisionInfo.TryGetComponent(out IInteracrable interactableColider))
+        {
+            interactableColider.InteractWithTrigger();
+        }
     }
 }
