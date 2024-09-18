@@ -6,9 +6,10 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class NewPlayer : MonoBehaviour
 {
-    [SerializeField] float _speed = 3f;
-    [SerializeField] float _speedSpace = 5f;
+    [SerializeField][Range(0f, 20f)] float _speed;
+    [SerializeField][Range(0f, 20f)] float _speedSpace;
     [SerializeField] Camera _camera;
+    [SerializeField][Range(0f, 20f)] float _maxAdditionalForce;
 
     Rigidbody _rb;
     float _inputHorizontal;
@@ -26,6 +27,9 @@ public class NewPlayer : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _speed = 10f;
+        _speedSpace = 5f;
+        _maxAdditionalForce = 12f;
     }
     void Start()
     {
@@ -60,8 +64,12 @@ public class NewPlayer : MonoBehaviour
     {
         if (_inputHorizontal != 0 || _inputVertical != 0)
         {
-            _rb.AddForce(new Vector3(_inputHorizontal * _speed, 0, _inputVertical * _speed));
-
+            Vector3 additionalForce = new Vector3(_inputHorizontal * _speed, 0, _inputVertical * _speed);
+            if (additionalForce.magnitude > _maxAdditionalForce)
+            {
+                additionalForce = additionalForce.normalized * _maxAdditionalForce;
+            }
+            _rb.AddForce(additionalForce);
         }
         if (_isInputSpace && _isCol)
         {
