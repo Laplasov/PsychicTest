@@ -1,27 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyScript : MonoBehaviour, IInteracrable
 {
     [SerializeField] GameObject _player;
-    [SerializeField] [Range(0f, 100f)] float _distanceField = 15f;
-    [SerializeField] [Range(0f, 10f)] float _speed = 4f;
+    [SerializeField][Range(0f, 100f)] float _distanceField = 15f;
+    [SerializeField][Range(0f, 10f)] float _speed = 4f;
     Quaternion _rotation;
     Vector3 _direction;
     float _distance;
     Vector3 _enemyTarget;
     Vector3 _startPos;
+    bool _waitOnStart = true;
 
-    private void Start()
+    private void Awake()
     {
         _startPos = transform.position;
+        StartCoroutine(Waiting());
     }
 
     void Update()
     {
+        if (_waitOnStart == true) return;
         RotateEnemy();
+        TargetHandler();
+        MoveEnemy();
+    }
+    IEnumerator Waiting() {
+        yield return new WaitForSeconds(1.5f); 
+        _waitOnStart = false;
+    }
 
+    void MoveEnemy()
+    {
+        //float newX = Mathf.MoveTowards(transform.position.x, _enemyTarget.x, _speed * Time.deltaTime);
+        //float newZ = Mathf.MoveTowards(transform.position.z, _enemyTarget.z, _speed * Time.deltaTime);
+
+        //transform.position = new Vector3(newX, transform.position.y, newZ);
+        Vector3 ZXPos = _enemyTarget;
+        ZXPos.y = transform.position.y;
+        transform.position = Vector3.MoveTowards(transform.position, ZXPos, _speed * Time.deltaTime);
+    }
+    void TargetHandler() 
+    {
         _distance = Vector3.Distance(_player.transform.position, transform.position);
         if (_distance < _distanceField)
         {
@@ -31,14 +55,8 @@ public class EnemyScript : MonoBehaviour, IInteracrable
         {
             _enemyTarget = _startPos;
         }
-
-        MoveEnemy();
     }
 
-    void MoveEnemy()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, _enemyTarget, _speed * Time.deltaTime);
-    }
     void RotateEnemy()
     {
         _direction = _enemyTarget - transform.position;
@@ -50,6 +68,7 @@ public class EnemyScript : MonoBehaviour, IInteracrable
     public void InteractWithCollision()
     {
         Debug.Log("Hit!");
+        Fading.Instans.LoadNextLevel();
     }
     public void InteractWithTrigger()
     {

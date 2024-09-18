@@ -97,7 +97,11 @@ public class NewPlayer : MonoBehaviour
     private void OnCollisionEnter(Collision collisionInfo)
     {
         if (collisionInfo.collider.TryGetComponent(out IInteracrable interactableColider)) {
-            interactableColider.InteractWithCollision();    
+            interactableColider.InteractWithCollision();
+            if (collisionInfo.transform.tag == "Enemy")
+            {
+                Destroy(collisionInfo.gameObject);
+            }
         }
     }
 
