@@ -10,6 +10,7 @@ public class NewPlayer : MonoBehaviour
     [SerializeField][Range(0f, 20f)] float _speedSpace;
     [SerializeField] Camera _camera;
     [SerializeField][Range(0f, 20f)] float _maxAdditionalForce;
+    [SerializeField][Range(0f, 10f)] float _CameraOffsetZ;
 
     Rigidbody _rb;
     float _inputHorizontal;
@@ -30,6 +31,7 @@ public class NewPlayer : MonoBehaviour
         _speed = 10f;
         _speedSpace = 5f;
         _maxAdditionalForce = 12f;
+        _CameraOffsetZ = 3f;
     }
     void Start()
     {
@@ -58,7 +60,7 @@ public class NewPlayer : MonoBehaviour
         _camera.transform.position = new Vector3(
             transform.position.x, 
             _camera.transform.position.y, 
-            transform.position.z);
+            transform.position.z - _CameraOffsetZ);
     }
     void MovePlayer()
     {
