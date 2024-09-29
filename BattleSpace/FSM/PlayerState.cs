@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -28,6 +29,7 @@ public class PlayerState : BaseBattleState
         if (WaitingForAction && ActionEnded) 
         {
             logic.StartCoroutine(ActionTime(logic));
+            logic.SwitchState(logic.EnemyState);
         }
         
     }
@@ -38,7 +40,10 @@ public class PlayerState : BaseBattleState
         ActionEnded = false;
         IsPlayerState = false;
         yield return new WaitForSeconds(2f);
-        logic.SwitchState(logic.EnemyState);
+        if (logic.EnemyUnits.Count == 0)
+            logic.SwitchState(logic.EndBattleState);
+        else
+            logic.SwitchState(logic.EnemyState);
     }
 
 }

@@ -10,6 +10,8 @@ public class EnemyUnitScriptableObject : ScriptableObject
     private string UnitName = "Shadow";
     [SerializeField]
     private string Loyalty = "Foe";
+    [SerializeField]
+    public GameObject EnemyUnitPrefab;
     [Header("Stats")]
     [SerializeField]
     private int minUnitLevel = 1;
@@ -51,7 +53,6 @@ public class EnemyUnitScriptableObject : ScriptableObject
     public int UnitSkillPoints;
     [HideInInspector]
     public int UnitCurrentHealth;
-
     public EnemyUnitStats GenerateRandomStats()
     {
         string unitName = UnitName;
@@ -79,6 +80,7 @@ public class EnemyUnitStats
     public int UnitSkillPoints;
     public int UnitCurrentHealth;
     public int UnitMaxHealth;
+
 
     public EnemyUnitStats(string unitName, string loyalty, int unitLevel, int unitAttack, int unitDefence, int unitSkillPoints, int unitCurrentHealth, int unitMaxHealth)
     {

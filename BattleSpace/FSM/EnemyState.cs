@@ -4,24 +4,43 @@ using UnityEngine;
 
 public class EnemyState : BaseBattleState
 {
+    private bool _isEnemyTurnComplited;
     public override void EnteringState(BattleLogic logic)
     {
-        logic.Massage.SetText("EnteringState");
+        _isEnemyTurnComplited = false;
+        logic.Massage.SetText("Enemy Turn");
 
-        foreach (EnemyUnit enemyUnit in logic.EnemyUnits)
-        {
-            logic.StartCoroutine(EnemyUnitAttack(logic));
-        }
+        logic.StartCoroutine(EnemyUnitAttack(logic));
     }
     public override void UpdateState(BattleLogic logic)
     {
+        if (_isEnemyTurnComplited)
+        {
+            _isEnemyTurnComplited = false;
+            logic.SwitchState(logic.PlayerState);
+        }
 
     }
     IEnumerator EnemyUnitAttack(BattleLogic logic)
     {
-
-        logic.Massage.SetText("Battle begins!!!");
         yield return new WaitForSeconds(2f);
-
+        int i = 1;
+        foreach (EnemyUnit enemyUnit in logic.EnemyUnits)
+        {
+            int Damage = logic.PlayerUnit.TakeDamage(enemyUnit.UnitAttack);
+            HUDPlayer.onPlayerAttacked.Invoke();
+            if (Damage > 0) 
+                logic.Massage.SetText($"{i} - Enemy inflict {Damage} damage!");
+            else 
+                logic.Massage.SetText($"{i} - Enemy damage blocked!");
+            if (logic.PlayerUnit.UnitCurrentHealth <= 0)
+            {
+                logic.SwitchState(logic.EndBattleState);
+                break;
+            }
+            i++;
+            yield return new WaitForSeconds(2f);
+        }
+        _isEnemyTurnComplited = true;
     }
 }

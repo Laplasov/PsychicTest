@@ -33,10 +33,6 @@ public class NewPlayer : MonoBehaviour
         _maxAdditionalForce = 12f;
         _CameraOffsetZ = 3f;
     }
-    void Start()
-    {
-
-    }
     void Update()
     {
         _inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -108,10 +104,10 @@ public class NewPlayer : MonoBehaviour
     {
         if (collisionInfo.collider.TryGetComponent(out IInteracrable interactableColider)) {
             interactableColider.InteractWithCollision();
-            if (collisionInfo.transform.tag == "Enemy")
-            {
-                Destroy(collisionInfo.gameObject);
-            }
+            //if (collisionInfo.transform.tag == "Enemy")
+            //{
+            //    Destroy(collisionInfo.gameObject);
+            //}
         }
     }
 

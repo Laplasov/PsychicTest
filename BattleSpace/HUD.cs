@@ -50,7 +50,7 @@ public class HUD : MonoBehaviour
     }
     public void OnObjectHovered(EnemyUnit enemyUnit)
     {
-        if (LockedObject == null && PlayerState.IsPlayerState == true) { 
+        if (LockedObject == null) {
             HUDholder.SetActive(true);
             SetStats(enemyUnit);
         }

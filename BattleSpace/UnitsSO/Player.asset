@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Player
   UnitLevel: 1
-  UnitHealth: 50
+  UnitHealth: 40
   UnitAttack: 10
   UnitDefence: 5
   UnitSkillPoints: 5
+  UnitMaxHealth: 50

@@ -4,10 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Fading : MonoBehaviour
+public class SceneManagerSinglton : MonoBehaviour
 {
     public Animator transition;
-    public static Fading Instans;
+    public static SceneManagerSinglton Instans;
     private AsyncOperation asyncLoad;
     private bool _isLoading = false;
     public GameObject RootTile;
@@ -25,7 +25,9 @@ public class Fading : MonoBehaviour
         if (Instans != null)
         {
             Destroy(gameObject);
-        } else
+            
+        }
+        else
         {
             Instans = this;
             DontDestroyOnLoad(Instans);
@@ -90,7 +92,7 @@ public class Fading : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         GameObject[] newTile = newScene.GetRootGameObjects();
         RootTile = newTile[0];
-        RootTile.transform.position = currentTile.transform.position + direction * 225f;
+        RootTile.transform.position = currentTile.transform.position + direction * 250f;
         onTileLoaded?.Invoke();
     }
 

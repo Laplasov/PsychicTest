@@ -21,6 +21,11 @@ public class PlayerUnit : MonoBehaviour
 
     void Awake()
     {
+        SetStats();
+        HUDPlayer.onPlayerAttacked += SetStats;
+    }
+    private void SetStats()
+    {
         stats = _so.GetPlayerStats();
         UnitName = stats.UnitName;
         UnitLevel = stats.UnitLevel;
@@ -31,13 +36,16 @@ public class PlayerUnit : MonoBehaviour
         UnitMaxHealth = stats.UnitMaxHealth;
     }
 
-    public void TakeDamage(int Damage)
+
+    public int TakeDamage(int Damage)
     {
         if (Damage > UnitDefence)
         {
             Damage -= UnitDefence;
-            UnitCurrentHealth -= Damage;
+            _so.UnitHealth -= Damage;
+            return Damage;
         }
+        return 0;
     }
 
 }

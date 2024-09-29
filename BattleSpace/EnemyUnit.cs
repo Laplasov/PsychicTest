@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 
 public class EnemyUnit : MonoBehaviour
 {
+    EnemyUnitScriptableObject _so;
+    public EnemyUnitStats stats;
+
     public string UnitName;
     public string Loyalty;
     public int UnitLevel;
@@ -15,11 +18,14 @@ public class EnemyUnit : MonoBehaviour
     public int UnitSkillPoints;
     public int UnitMaxHealth;
     public int UnitCurrentHealth;
-    [SerializeField]
-    EnemyUnitScriptableObject _so;
-    public EnemyUnitStats stats;
 
-    void Awake()
+    public EnemyUnitScriptableObject SO 
+    {
+        get { return _so; } 
+        set { _so = value; }
+    }
+
+    void Start()
     {
         stats = _so.GenerateRandomStats();
         UnitName = stats.UnitName;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,12 +16,21 @@ public class EnemyScript : MonoBehaviour, IInteracrable
     Vector3 _enemyTarget;
     Vector3 _startPos;
     bool _waitOnStart = true;
+    bool _wasHit = true;
+
+    [SerializeField]
+    private EnemyUnitScriptableObject _enemyUnitSO;
+    [SerializeField]
+    public EnemyUnitScriptableObject[] EnemyUnits;
 
     private void Awake()
     {
+        _wasHit = false;
+        GeneratRandomInstansesOfUnits();
         _startPos = transform.position;
         StartCoroutine(Waiting());
     }
+    private void OnEnable() => StartCoroutine(Waiting());
 
     void Update()
     {
@@ -30,7 +40,15 @@ public class EnemyScript : MonoBehaviour, IInteracrable
         MoveEnemy();
     }
     IEnumerator Waiting() {
-        yield return new WaitForSeconds(1.5f); 
+        _waitOnStart = true;
+
+        if (_wasHit == true) EnemyUnits = InitBattleData.EnemyUnitsInitData.ToArray();
+
+        if (EnemyUnits.Length == 0)
+            Destroy(this.gameObject);
+
+        yield return new WaitForSeconds(2.5f); 
+        _wasHit = false;
         _waitOnStart = false;
     }
 
@@ -64,11 +82,27 @@ public class EnemyScript : MonoBehaviour, IInteracrable
         float targetAngle = Mathf.Atan2(_enemyTarget.x - transform.position.x, _enemyTarget.z - transform.position.z) * Mathf.Rad2Deg;
         transform.eulerAngles = new Vector3(0, targetAngle, 0);
     }
+    private void GeneratRandomInstansesOfUnits()
+    {
+        int enemyCount = Random.Range(1, 4);
+        EnemyUnits = new EnemyUnitScriptableObject[enemyCount];
+        int i = 0;
+        foreach (EnemyUnitScriptableObject Unity in EnemyUnits)
+        {
+            EnemyUnits[i] = _enemyUnitSO;
+            i++;
+        }
+    }
 
     public void InteractWithCollision()
     {
-        Debug.Log("Hit!");
-        Fading.Instans.LoadNextLevel();
+        if (_waitOnStart != true) 
+        {
+            Debug.Log("Hit!");
+            _wasHit = true;
+            InitBattleData.EnemyUnitsInitData = EnemyUnits.ToList();
+            SceneManagerSinglton.Instans.LoadNextLevel();
+        }
     }
     public void InteractWithTrigger()
     {

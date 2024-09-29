@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using static UnityEditor.Progress;
 using UnityEngine.UI;
+using System.Linq;
 
 public class ActionButtonProxy : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class ActionButtonProxy : MonoBehaviour
     private GameObject _optionPrefab;
     [SerializeField]
     private GameObject _player;
+    [SerializeField]
+    private BattleLogic BattleLogic;
     private List<AttackItemsSO> _type;
 
     private void Awake()
@@ -64,6 +67,13 @@ public class ActionButtonProxy : MonoBehaviour
         HUD.LockedObject = null;
         HUD.HUDholder.SetActive(false);
         _optionsHolder.SetActive(false);
+        if (enemyUnit.UnitCurrentHealth <= 0)
+        {
+            BattleLogic.EnemyUnits.Remove(enemyUnit);
+            InitBattleData.EnemyUnitsInitData.Remove(enemyUnit.SO);
+            Destroy(enemyUnit.gameObject);
+        }
+
         PlayerState.ActionEnded = true;
     }
 }

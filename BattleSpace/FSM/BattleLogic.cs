@@ -11,33 +11,31 @@ public class BattleLogic : MonoBehaviour
     public PlayerState PlayerState = new PlayerState();
     public EnemyState EnemyState = new EnemyState();
     public EndBattleState EndBattleState = new EndBattleState();
+
     [SerializeField]
     private TMP_Text _massage;
     [SerializeField]
     private GameObject _optionsContent;
     [SerializeField]
-    private EnemyUnit[] _enemyUnits;
+    private PlayerUnit _playerUnit;
     [SerializeField]
-    private PlayerUnitScriptableObject _playerSO;
+    public GameObject[] EnemySpown;
+    [HideInInspector]
+    public List<EnemyUnit> EnemyUnits = new List<EnemyUnit>();
     public TMP_Text Massage
     {
         get { return _massage; }
         private set { _massage = value; }
-    }
-    public EnemyUnit[] EnemyUnits
-    {
-        get { return _enemyUnits; }
-        private set { _enemyUnits = value; }
     }
     public GameObject OptionsContent
     {
         get { return _optionsContent; }
         private set { _optionsContent = value; }
     }
-    public PlayerUnitScriptableObject PlayerSO
+    public PlayerUnit PlayerUnit
     {
-        get { return _playerSO; }
-        private set { _playerSO = value; }
+        get { return _playerUnit; }
+        private set { _playerUnit = value; }
     }
 
     void Start()

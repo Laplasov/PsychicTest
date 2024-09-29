@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -23,16 +24,14 @@ public class HUDPlayer : MonoBehaviour
     private TMP_Text UnitCurrentHealth;
     [SerializeField]
     private Slider UnitSlider;
+    public static Action onPlayerAttacked;
 
     private void Awake()
     {
         SetStats();
+        onPlayerAttacked += SetStats;
     }
 
-    public void SetPlayerStats()
-    {
-        SetStats();
-    }
     private void SetStats()
     {
         UnitName.text = stats.UnitName;

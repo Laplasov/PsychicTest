@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SceneButtonProxy : MonoBehaviour
 {
-    public void OnButtonClick()
+    public static void OnButtonClick()
     {
-        if (Fading.Instans != null)
+        if (SceneManagerSinglton.Instans != null)
         {
-            Fading.Instans.LoadNextLevel();
+            SceneManagerSinglton.Instans.LoadNextLevel();
         }
         else
         {
