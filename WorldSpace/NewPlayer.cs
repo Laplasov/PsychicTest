@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static NewPlayer;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class NewPlayer : MonoBehaviour
@@ -27,6 +28,7 @@ public class NewPlayer : MonoBehaviour
 
     private void Awake()
     {
+        InitBattleData.Player = gameObject;
         _rb = GetComponent<Rigidbody>();
         _speed = 10f;
         _speedSpace = 5f;

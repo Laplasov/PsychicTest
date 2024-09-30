@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,18 +15,19 @@ public class SceneManagerSinglton : MonoBehaviour
     public string WallSide;
     public string[] sceneNames;
     private int currentSceneIndex;
+    Scene _scene1;
 
     public delegate void OnTileLoaded();
     public static event OnTileLoaded onTileLoaded;
 
     private void Awake()
     {
+        _scene1 = SceneManager.GetSceneByName("Scene1");
         sceneNames = new string[] { "Map1", "Map2", "Map3", "Map4", "Map5", "Map6", "Map7", "Map8", "Map9" };
         currentSceneIndex = 0;
         if (Instans != null)
         {
             Destroy(gameObject);
-            
         }
         else
         {
@@ -50,8 +52,7 @@ public class SceneManagerSinglton : MonoBehaviour
     {
         transition.SetTrigger("Start");
         yield return new WaitForSeconds(1f);
-        Scene scene1 = SceneManager.GetSceneByName("Scene1");
-        foreach (GameObject go in scene1.GetRootGameObjects())
+        foreach (GameObject go in _scene1.GetRootGameObjects())
         {
             go.SetActive(false);
         }
@@ -67,8 +68,7 @@ public class SceneManagerSinglton : MonoBehaviour
         SceneManager.UnloadSceneAsync("Scene2");
         yield return new WaitForSeconds(1f);
         while (!asyncLoad.isDone) yield return null;
-        Scene scene1 = SceneManager.GetSceneByName("Scene1");
-        foreach (GameObject go in scene1.GetRootGameObjects())
+        foreach (GameObject go in _scene1.GetRootGameObjects())
         {
             go.SetActive(true);
         }
@@ -94,6 +94,7 @@ public class SceneManagerSinglton : MonoBehaviour
         RootTile = newTile[0];
         RootTile.transform.position = currentTile.transform.position + direction * 250f;
         onTileLoaded?.Invoke();
+        SceneManager.MergeScenes(newScene, _scene1);
     }
 
     private Vector3 WallSwitch(string wallName, GameObject currentTile) 
@@ -117,5 +118,6 @@ public class SceneManagerSinglton : MonoBehaviour
                 return Vector3.zero;
         }
     }
+
 }
 

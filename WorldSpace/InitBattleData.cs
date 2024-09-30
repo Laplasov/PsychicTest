@@ -5,4 +5,5 @@ using UnityEngine;
 public class InitBattleData : MonoBehaviour
 {
     public static List<EnemyUnitScriptableObject> EnemyUnitsInitData = new List<EnemyUnitScriptableObject>();
+    public static GameObject Player;
 }

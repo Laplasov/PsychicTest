@@ -34,7 +34,8 @@ public class TileField : MonoBehaviour
 
         if (_count == 0)
         {
-            SceneManager.UnloadSceneAsync(gameObject.scene); 
+            //SceneManager.UnloadSceneAsync(gameObject.scene); 
+            Destroy(gameObject);
         }
         --_count;
     }

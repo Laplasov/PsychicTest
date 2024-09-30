@@ -4,10 +4,11 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static NewPlayer;
 
 public class EnemyScript : MonoBehaviour, IInteracrable
 {
-    [SerializeField] GameObject _player;
+    GameObject _player;
     [SerializeField][Range(0f, 100f)] float _distanceField = 15f;
     [SerializeField][Range(0f, 10f)] float _speed = 4f;
     Quaternion _rotation;
@@ -23,11 +24,11 @@ public class EnemyScript : MonoBehaviour, IInteracrable
     [SerializeField]
     public EnemyUnitScriptableObject[] EnemyUnits;
 
+
     private void Awake()
     {
         _wasHit = false;
         GeneratRandomInstansesOfUnits();
-        _startPos = transform.position;
         StartCoroutine(Waiting());
     }
     private void OnEnable() => StartCoroutine(Waiting());
@@ -35,8 +36,10 @@ public class EnemyScript : MonoBehaviour, IInteracrable
     void Update()
     {
         if (_waitOnStart == true) return;
-        RotateEnemy();
+        _startPos = transform.parent.position;
         TargetHandler();
+        if (Vector3.Distance(transform.position, _startPos) < 1f && _enemyTarget == _startPos) return;
+        RotateEnemy();
         MoveEnemy();
     }
     IEnumerator Waiting() {
@@ -46,8 +49,8 @@ public class EnemyScript : MonoBehaviour, IInteracrable
 
         if (EnemyUnits.Length == 0)
             Destroy(this.gameObject);
-
-        yield return new WaitForSeconds(2.5f); 
+        yield return new WaitForSeconds(2.5f);
+        _player = InitBattleData.Player;
         _wasHit = false;
         _waitOnStart = false;
     }
