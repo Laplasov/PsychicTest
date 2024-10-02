@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     private GameObject _prefab;
     [SerializeField]
     private Light _light;
+    [SerializeField]
+    public EnemyUnitScriptableObject _enemyUnitSO;
     void Awake()
     {
         Transform[] children = GetComponentsInChildren<Transform>();
@@ -22,10 +24,14 @@ public class SpawnManager : MonoBehaviour
             //    Transform grandchild = child.GetChild(0);
             //    Destroy(grandchild.gameObject);
             //}
-            Instantiate(_prefab, child.position, child.rotation, child);
+
+            GameObject enemyUnit = Instantiate(_prefab, child.position, child.rotation, child);
+            enemyUnit.transform.SetParent(child);
+            //EnemyScript enemyUnitScript = enemyUnit.GetComponent<EnemyScript>();
+            EnemyScript enemyUnitScript = enemyUnit.AddComponent<EnemyScript>();
+            //enemyUnitScript.EnemyUnitSO = _enemyUnitSO;
             Instantiate(_light, child.position, child.rotation, child);
         }
 
     }
-
 }

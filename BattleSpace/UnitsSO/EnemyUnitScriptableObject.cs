@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,6 +11,8 @@ public class EnemyUnitScriptableObject : ScriptableObject
     private string UnitName = "Shadow";
     [SerializeField]
     private string Loyalty = "Foe";
+    [SerializeField]
+    private bool IsElite = false;
     [SerializeField]
     public GameObject EnemyUnitPrefab;
     [Header("Stats")]
@@ -57,6 +60,7 @@ public class EnemyUnitScriptableObject : ScriptableObject
     {
         string unitName = UnitName;
         string loyalty = Loyalty;
+        bool elite = IsElite;
         int unitLevel = Random.Range(minUnitLevel, maxUnitLevel);
         int unitAttack = Random.Range(minUnitAttack, maxUnitAttack) + (unitLevel * AttackLvlMultiplication);
         int unitDefence = Random.Range(minUnitDefence, maxUnitDefence) + (unitLevel * DefenceLvlMultiplication);
@@ -64,7 +68,7 @@ public class EnemyUnitScriptableObject : ScriptableObject
         int unitCurrentHealth = Random.Range(minHealth, maxHealth) + (unitLevel * HealthLvlMultiplication);
         int unitMaxHealth = unitCurrentHealth;
 
-        return new EnemyUnitStats(unitName, loyalty, unitLevel, unitAttack, unitDefence, unitSkillPoints, unitCurrentHealth, unitMaxHealth);
+        return new EnemyUnitStats(unitName, loyalty, elite, unitLevel, unitAttack, unitDefence, unitSkillPoints, unitCurrentHealth, unitMaxHealth, EnemyUnitPrefab);
 
     }
 
@@ -74,23 +78,27 @@ public class EnemyUnitStats
 {
     public string UnitName;
     public string Loyalty;
+    public bool IsElite;
     public int UnitLevel;
     public int UnitAttack;
     public int UnitDefence;
     public int UnitSkillPoints;
     public int UnitCurrentHealth;
     public int UnitMaxHealth;
+    public GameObject EnemyUnitPrefab;
 
 
-    public EnemyUnitStats(string unitName, string loyalty, int unitLevel, int unitAttack, int unitDefence, int unitSkillPoints, int unitCurrentHealth, int unitMaxHealth)
+    public EnemyUnitStats(string unitName, string loyalty, bool elite, int unitLevel, int unitAttack, int unitDefence, int unitSkillPoints, int unitCurrentHealth, int unitMaxHealth, GameObject enemyUnitPrefab)
     {
         UnitName = unitName;
         Loyalty = loyalty;
+        IsElite = elite;
         UnitLevel = unitLevel;
         UnitAttack = unitAttack;
         UnitDefence = unitDefence;
         UnitSkillPoints = unitSkillPoints;
         UnitCurrentHealth = unitCurrentHealth;
         UnitMaxHealth = unitMaxHealth;
+        EnemyUnitPrefab = enemyUnitPrefab;
     }
 }

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Fist
   m_EditorClassIdentifier: 
   Name: Fist
-  Damage: 100
+  Damage: 10

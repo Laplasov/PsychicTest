@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitName: Shadow
   Loyalty: Foe
-  EnemyUnitPrefab: {fileID: 3561288243969973186, guid: 866219a98745d12479fafc42d5e16ee7, type: 3}
+  EnemyUnitPrefab: {fileID: 8954434415586591938, guid: 435de1b396cc7e44bb412e12bcad5861, type: 3}
   minUnitLevel: 1
   maxUnitLevel: 3
-  maxHealth: 25
-  minHealth: 35
+  maxHealth: 35
+  minHealth: 25
   minUnitAttack: 3
   maxUnitAttack: 8
   minUnitDefence: 1

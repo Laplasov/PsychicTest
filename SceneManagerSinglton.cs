@@ -57,6 +57,7 @@ public class SceneManagerSinglton : MonoBehaviour
             go.SetActive(false);
         }
         asyncLoad = SceneManager.LoadSceneAsync(Scene, LoadSceneMode.Additive);
+        InitBattleData.BattleScene = true;
         while (!asyncLoad.isDone) yield return null;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(Scene));
         transition.SetTrigger("End");
@@ -66,6 +67,7 @@ public class SceneManagerSinglton : MonoBehaviour
     {
         transition.SetTrigger("Start");
         SceneManager.UnloadSceneAsync("Scene2");
+        InitBattleData.BattleScene = false;
         yield return new WaitForSeconds(1f);
         while (!asyncLoad.isDone) yield return null;
         foreach (GameObject go in _scene1.GetRootGameObjects())

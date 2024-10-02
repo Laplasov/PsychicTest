@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class EnemyUnit : MonoBehaviour
 {
@@ -25,9 +26,16 @@ public class EnemyUnit : MonoBehaviour
         set { _so = value; }
     }
 
-    void Start()
+    //private void Awake()
+    //{
+    //    if (!InitBattleData.BattleScene)
+    //        Destroy(this);
+    //}
+
+    public void PutStats(EnemyUnitStats Stats)
     {
-        stats = _so.GenerateRandomStats();
+        //stats = _so.GenerateRandomStats();
+        stats = Stats;
         UnitName = stats.UnitName;
         Loyalty = stats.Loyalty;
         UnitLevel = stats.UnitLevel;

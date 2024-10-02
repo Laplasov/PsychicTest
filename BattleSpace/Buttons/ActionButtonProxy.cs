@@ -70,7 +70,7 @@ public class ActionButtonProxy : MonoBehaviour
         if (enemyUnit.UnitCurrentHealth <= 0)
         {
             BattleLogic.EnemyUnits.Remove(enemyUnit);
-            InitBattleData.EnemyUnitsInitData.Remove(enemyUnit.SO);
+            InitBattleData.EnemyUnitsInitData.Remove(enemyUnit.stats);
             Destroy(enemyUnit.gameObject);
         }
 
