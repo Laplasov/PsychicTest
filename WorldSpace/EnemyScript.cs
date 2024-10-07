@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using static NewPlayer;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class EnemyScript : MonoBehaviour, IInteracrable
 {
@@ -89,10 +90,11 @@ public class EnemyScript : MonoBehaviour, IInteracrable
         {
             _wasHit = true;
             InitBattleData.EnemyUnitsInitData = EnemyUnits.ToList();
+            _player.GetComponent<Inventory>().LoadActionsToBattleInit();
             SceneManagerSinglton.Instans.LoadNextLevel();
         }
     }
-    public void InteractWithTrigger()
-    {
-    }
+    public void InteractWithTrigger() { }
+    public void InteractWithTriggerStay() { }
+    public void InteractWithTriggerExit() { }
 }

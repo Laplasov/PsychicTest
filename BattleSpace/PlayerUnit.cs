@@ -16,11 +16,14 @@ public class PlayerUnit : MonoBehaviour
     PlayerUnitScriptableObject _so;
     public PlayerUnitStats stats;
     public List<AttackItemsSO> AttackOptions;
-    public List<AttackItemsSO> DefenceOptions;
-    public List<AttackItemsSO> SkillOptions;
+    public List<DefenceItemsSO> DefenceOptions;
+    public List<SkillsSO> SkillOptions;
 
     void Awake()
     {
+        AttackOptions = InitBattleData.AttackItemsSO;
+        DefenceOptions = InitBattleData.DefenceItemsSO;
+        SkillOptions = InitBattleData.SkillsSO;
         SetStats();
         HUDPlayer.onPlayerAttacked += SetStats;
     }

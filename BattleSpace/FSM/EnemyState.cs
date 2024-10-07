@@ -14,7 +14,7 @@ public class EnemyState : BaseBattleState
     }
     public override void UpdateState(BattleLogic logic)
     {
-        if (_isEnemyTurnComplited)
+        if (_isEnemyTurnComplited && logic.EnemyUnits.Count > 0)
         {
             _isEnemyTurnComplited = false;
             logic.SwitchState(logic.PlayerState);
@@ -23,10 +23,12 @@ public class EnemyState : BaseBattleState
     }
     IEnumerator EnemyUnitAttack(BattleLogic logic)
     {
+        List<EnemyUnit> enemyUnits = new List<EnemyUnit>(logic.EnemyUnits);
         yield return new WaitForSeconds(2f);
         int i = 1;
-        foreach (EnemyUnit enemyUnit in logic.EnemyUnits)
+        foreach (EnemyUnit enemyUnit in enemyUnits)
         {
+
             int Damage = logic.PlayerUnit.TakeDamage(enemyUnit.UnitAttack);
             HUDPlayer.onPlayerAttacked.Invoke();
             if (Damage > 0) 

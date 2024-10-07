@@ -20,7 +20,7 @@ public class ActionButtonProxy : MonoBehaviour
     private GameObject _player;
     [SerializeField]
     private BattleLogic BattleLogic;
-    private List<AttackItemsSO> _type;
+    private List<ActionFactorySO> _type;
 
     private void Awake()
     {
@@ -31,19 +31,23 @@ public class ActionButtonProxy : MonoBehaviour
     {
         if (HUD.LockedObject != null && PlayerState.WaitingForAction)
         {
+            //Set Title
             _optionsHolder.SetActive(true);
             _optionsText.SetText(transform.GetChild(0).name);
 
+            // Empty content befor
             foreach (Transform child in _content.transform)
                 Destroy(child.gameObject);
 
+            // Chose button to load by type
             PlayerUnit playerUnit = _player.GetComponent<PlayerUnit>();
 
-            if (transform.GetChild(0).name == "Attack") _type = playerUnit.AttackOptions;
-            if (transform.GetChild(0).name == "Defence") _type = playerUnit.DefenceOptions;
-            if (transform.GetChild(0).name == "Skill") _type = playerUnit.SkillOptions;
+            if (transform.GetChild(0).name == "Attack") _type = playerUnit.AttackOptions.Cast<ActionFactorySO>().ToList();
+            if (transform.GetChild(0).name == "Defence") _type = playerUnit.DefenceOptions.Cast<ActionFactorySO>().ToList();
+            if (transform.GetChild(0).name == "Skill") _type = playerUnit.SkillOptions.Cast<ActionFactorySO>().ToList();
 
-            foreach (AttackItemsSO item in _type) { 
+            //Load array of options in HUD
+            foreach (ActionFactorySO item in _type) { 
 
                 GameObject optionInstance = Instantiate(_optionPrefab);
                 optionInstance.transform.SetParent(_content.transform, false);
@@ -54,13 +58,14 @@ public class ActionButtonProxy : MonoBehaviour
                 TMP_Text damageText = optionInstance.transform.GetChild(1).GetComponent<TMP_Text>();
                 damageText.SetText(damageText.text + " - "+ item.Damage.ToString());
 
+                // Adding inflict damage on option
                 Button button = optionInstance.GetComponent<Button>();
                 button.onClick.AddListener(() => InflictDamage(item));
 
             }
         }
     }
-    private void InflictDamage(AttackItemsSO item)
+    private void InflictDamage(ActionFactorySO item)
     {
         EnemyUnit enemyUnit = HUD.LockedObject.GetComponent<EnemyUnit>();
         enemyUnit.TakeDamage(item.Damage);

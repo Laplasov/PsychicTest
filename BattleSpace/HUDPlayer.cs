@@ -43,4 +43,5 @@ public class HUDPlayer : MonoBehaviour
         UnitSlider.maxValue = stats.UnitMaxHealth;
         UnitSlider.value = stats.UnitHealth;
     }
+    private void OnDestroy()=> onPlayerAttacked -= SetStats;
 }

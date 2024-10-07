@@ -4,20 +4,35 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static NewPlayer;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using System;
+using TMPro;
 
 public class NewPlayer : MonoBehaviour
 {
-    [SerializeField][Range(0f, 20f)] float _speed;
-    [SerializeField][Range(0f, 20f)] float _speedSpace;
-    [SerializeField] Camera _camera;
-    [SerializeField][Range(0f, 20f)] float _maxAdditionalForce;
-    [SerializeField][Range(0f, 10f)] float _CameraOffsetZ;
+    [SerializeField]
+    [Range(0f, 20f)] 
+    float _speed;
+    [SerializeField]
+    [Range(0f, 20f)] 
+    float _speedSpace;
+    [SerializeField] 
+    Camera _camera;
+    [SerializeField]
+    [Range(0f, 20f)] 
+    float _maxAdditionalForce;
+    [SerializeField]
+    [Range(0f, 10f)] 
+    float _CameraOffsetZ;
+    [SerializeField]
+    private GameObject _eButton;
+    private TMP_Text _eButtonTMPText;
 
     Rigidbody _rb;
     float _inputHorizontal;
     float _inputVertical;
     bool _isInputSpace = false;
     bool _isCol;
+    //bool _isTrigger = false;
     float _angle;
     Vector3 _mousePos;
     Vector3 _screenPosition;
@@ -25,6 +40,7 @@ public class NewPlayer : MonoBehaviour
     Vector3 _playerPos;
     Vector3 _direction;
     Ray _cursorRay;
+    public Action OpenStash;
 
     private void Awake()
     {
@@ -34,6 +50,8 @@ public class NewPlayer : MonoBehaviour
         _speedSpace = 5f;
         _maxAdditionalForce = 12f;
         _CameraOffsetZ = 3f;
+        _eButtonTMPText = _eButton.transform.GetChild(0).GetComponent<TMP_Text>();
+        OpenStash += () =>  _eButton.SetActive(false); 
     }
     void Update()
     {
@@ -41,9 +59,10 @@ public class NewPlayer : MonoBehaviour
         _inputVertical = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            _isInputSpace = true; 
-        } 
+            _isInputSpace = true;
+
+        if (Input.GetKeyDown(KeyCode.E))
+            OpenStash?.Invoke();
 
         RotatePlayer();
         MoveCamera();
@@ -133,6 +152,30 @@ public class NewPlayer : MonoBehaviour
         if (collisionInfo.TryGetComponent(out IInteracrable interactableColider))
         {
             interactableColider.InteractWithTrigger();
+        }
+        if (collisionInfo.TryGetComponent(out IPopUp PopUp))
+        {
+            string PopUpText = PopUp.PopUpText();
+            _eButtonTMPText.text = PopUpText;
+            _eButton.SetActive(true);
+        }
+    }
+    private void OnTriggerStay(Collider collisionInfo)
+    {
+        if (collisionInfo.TryGetComponent(out IInteracrable interactableColider))
+        {
+            interactableColider.InteractWithTriggerStay();
+        }
+    }
+    private void OnTriggerExit(Collider collisionInfo)
+    {
+        if (collisionInfo.TryGetComponent(out IInteracrable interactableColider))
+        {
+            interactableColider.InteractWithTriggerExit();
+        }
+        if (collisionInfo.TryGetComponent(out IPopUp PopUp))
+        {
+            _eButton.SetActive(false);
         }
     }
 }

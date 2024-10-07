@@ -28,11 +28,9 @@ public class BeginState : BaseBattleState
             GameObject enemyUnitPrefab = stats.EnemyUnitPrefab;
             GameObject enemyUnit = GameObject.Instantiate(enemyUnitPrefab, logic.EnemySpown[i].transform.position, logic.EnemySpown[i].transform.rotation);
             enemyUnit.transform.SetParent(logic.EnemySpown[i].transform);
-            //EnemyUnit enemyUnitScript = enemyUnit.GetComponent<EnemyUnit>();
             EnemyUnit enemyUnitScript = enemyUnit.AddComponent<EnemyUnit>();
             enemyUnitScript.PutStats(stats);
             logic.EnemyUnits.Add(enemyUnitScript);
-            //enemyUnitScript.stats = stats; 
             i++;
         }
         yield return new WaitForSeconds(2f);
